@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Event Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: #36d1dc;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: #6c63ff;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background-color: #6c63ff;
+            color: white;
+            font-size: 16px;
+        }
+
+
+        .event {
+            background: #f3f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .event h4 {
+            margin: 0;
+            color: #333;
+        }
+
+        .event small {
+            color: #666;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .actions button {
+            flex: 1;
+        }
+
+        .dom-card {
+            grid-column: span 2;
+        }
+
+        .output {
+            padding: 12px;
+            background: #f4f4f4;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Smart Event Dashboard</h1>
+
+    <div class="container">
+
+        
+        <div class="card">
+            <h2>Add New Event</h2>
+
+            <label>Event Title</label>
+            <input type="text" id="title">
+
+            <label>Event Date</label>
+            <input type="date" id="date">
+
+            <label>Category</label>
+            <select id="category">
+                <option selected disabled>Seclect Option</option>
+                <option>Conference</option>
+                <option>Workshop</option>
+                <option>Seminar</option>
+                <option>Meeting</option>
+            </select>
+
+            <label>Description</label>
+            <textarea id="description"></textarea>
+
+            <button onclick="addEvent()">Add Event</button>
+        </div>
+
+        
+        <div class="card">
+            <h2>My Events</h2>
+
+            <div class="actions">
+                <button onclick="clearEvents()">Clear All Events</button>
+                <button onclick="addSampleEvents()">Add Sample Events</button>
+            </div>
+
+            <div id="eventList">
+                <p style="color: gray;">No events yet. Add your first event!</p>
+            </div>
+        </div>
+
+        
+        <div class="card dom-card">
+            <h2>DOM Manipulation Demo</h2>
+            <div class="output" id="keyOutput">Press any key...</div>
+        </div>
+
+    </div>
+
+    <script>
+        const eventList = document.getElementById("eventList");
+
+        function addEvent() {
+            const title = document.getElementById("title").value;
+            const date = document.getElementById("date").value;
+            const category = document.getElementById("category").value;
+            const desc = document.getElementById("description").value;
+
+            if (!title || !date) {
+                alert("Please enter event title and date");
+                return;
+            }
+
+            if (eventList.querySelector("p")) {
+                eventList.innerHTML = "";
+            }
+
+            const div = document.createElement("div");
+            div.className = "event";
+
+            div.innerHTML = `
+                <h4>${title}</h4>
+                <small>${date} | ${category}</small>
+                <p>${desc}</p>
+            `;
+
+            eventList.appendChild(div);
+
+            document.getElementById("title").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("description").value = "";
+        }
+
+        function clearEvents() {
+            eventList.innerHTML = `<p style="color: gray;">No events yet. Add your first event!</p>`;
+        }
+
+        function addSampleEvents() {
+            clearEvents();
+
+            const samples = [
+                { title: "Tech Conference", date: "2026-02-15", cat: "Conference", desc: "Annual tech meet" },
+                { title: "Web Workshop", date: "2026-03-10", cat: "Workshop", desc: "Hands-on HTML, CSS & JS" }
+            ];
+
+            samples.forEach(e => {
+                const div = document.createElement("div");
+                div.className = "event";
+                div.innerHTML = `
+                    <h4>${e.title}</h4>
+                    <small>${e.date} | ${e.cat}</small>
+                    <p>${e.desc}</p>
+                `;
+                eventList.appendChild(div);
+            });
+        }
+
+        document.addEventListener("keydown", (e) => {
+            document.getElementById("keyOutput").innerText =
+                `You Pressed: ${e.key}`;
+        });
+    </script>
+
+</body>
+</html>
